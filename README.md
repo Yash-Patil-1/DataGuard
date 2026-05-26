@@ -6,8 +6,7 @@
     <img src="https://img.shields.io/badge/license-MIT-green" alt="MIT License">
     <img src="https://img.shields.io/badge/status-production%20ready-brightgreen" alt="Production Ready">
     <img src="https://img.shields.io/badge/coverage-72%20tests-passing-brightgreen" alt="72 tests passing">
-    <img src="https://img.shields.io/github/actions/workflow/status/yourusername/dataguard/ci.yml?branch=main&label=CI" alt="CI">
-    <img src="https://img.shields.io/badge/docker-ready-2496ED?logo=docker" alt="Docker Ready">
+    <img src="https://img.shields.io/github/actions/workflow/status/Yash-Patil-1/dataguard/ci.yml?branch=main&label=CI" alt="CI">
   </p>
 </div>
 
@@ -25,7 +24,6 @@
 | **🖥️ Interactive Dashboard** | 6-page Streamlit dashboard with drill-downs and live charts |
 | **📚 Data Catalog** | Auto-generated schema documentation with column profiles & quality flags |
 | **🔔 Alerting** | Slack webhook + SMTP email + console alerts with configurable thresholds |
-| **🐳 Docker Support** | Containerized pipeline + dashboard + scheduler |
 | **⏰ Scheduling** | Built-in continuous loop + cron-style for CI/CD integration |
 | **✅ 72+ Unit Tests** | Comprehensive test coverage across all modules |
 
@@ -35,7 +33,7 @@
 
 ```bash
 # Clone
-git clone https://github.com/yourusername/dataguard.git
+git clone https://github.com/Yash-Patil-1/dataguard.git
 cd dataguard
 
 # Install
@@ -87,8 +85,6 @@ DataGuard/
 ├── reports/               # Quality reports (auto-created)
 ├── dashboard.py           # Streamlit interactive dashboard
 ├── run_pipeline.py        # CLI pipeline orchestrator
-├── Dockerfile             # Multi-stage Docker build
-├── docker-compose.yml     # 3-service orchestration
 └── README.md              # You are here
 ```
 
@@ -180,23 +176,6 @@ python run_pipeline.py --alert
 ```
 
 Alert triggers: critical score drop, any check failures, drift events, daily summary.
-
----
-
-## 🐳 Docker
-
-```bash
-# Build and start all services
-docker compose up -d
-
-# Services:
-#   pipeline  — runs once on start (generate + validate + detect)
-#   dashboard — Streamlit on port 8501
-#   scheduler — runs pipeline every hour (configurable)
-
-# View logs
-docker compose logs -f
-```
 
 ---
 
@@ -309,6 +288,16 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 4. Commit your changes (`git commit -m 'Add amazing feature'`)
 5. Push to the branch (`git push origin feature/amazing`)
 6. Open a Pull Request
+
+---
+
+## 📬 Contact
+
+**Yash Patil**
+
+- 📧 [yashpatil7714@gmail.com](mailto:yashpatil7714@gmail.com)
+- 🔗 [LinkedIn](https://www.linkedin.com/in/yash-patil-997357330)
+- 🐙 [GitHub](https://github.com/Yash-Patil-1)
 
 ---
 

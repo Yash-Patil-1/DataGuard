@@ -45,8 +45,6 @@ htmlcov/
 .pytest_cache/
 coverage.xml
 
-# ── Docker (these ARE committed — see .dockerignore for build exclusions)
-
 # ── OS Files ──────────────────────────────────────────────
 *.dmg
 *.pkg
