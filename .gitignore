@@ -1,0 +1,62 @@
+# ── Generated Data ──────────────────────────────────────────
+data/
+*.csv
+*.log
+
+# ── Reports ───────────────────────────────────────────────
+reports/
+*.json
+*.txt
+
+# ── Python Bytecode ──────────────────────────────────────
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.egg-info/
+dist/
+build/
+.eggs/
+*.egg
+
+# ── Environments ──────────────────────────────────────────
+.env
+.env.*
+!.env.example
+venv/
+.venv/
+virtualenv/
+*.local
+
+# ── IDE / Editor ─────────────────────────────────────────
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+*.sublime-*
+
+# ── Testing / Coverage ───────────────────────────────────
+.coverage
+.coverage.*
+htmlcov/
+.pytest_cache/
+coverage.xml
+
+# ── Docker (these ARE committed — see .dockerignore for build exclusions)
+
+# ── OS Files ──────────────────────────────────────────────
+*.dmg
+*.pkg
+*.deb
+*.exe
+*.msi
+
+# ── Jupyter Notebooks ────────────────────────────────────
+notebooks/
+
+# ── Project-specific ─────────────────────────────────────
+*.db
+quality_timeline.db

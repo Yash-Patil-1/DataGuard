@@ -1,0 +1,44 @@
+# DataGuard — Alert Configuration
+#
+# Copy this file to configure alert channels.
+# Environment variables override these values at runtime.
+#
+# Required env vars for Slack:
+#   DATAGUARD_SLACK_WEBHOOK=https://hooks.slack.com/services/...
+#
+# Required env vars for Email:
+#   DATAGUARD_SMTP_HOST=smtp.gmail.com
+#   DATAGUARD_SMTP_PORT=587
+#   DATAGUARD_SMTP_USER=your@email.com
+#   DATAGUARD_SMTP_PASS=your-app-password
+#   DATAGUARD_ALERT_EMAILS=team@example.com,manager@example.com
+
+# ── Slack Integration ─────────────────────────────────────
+slack:
+  enabled: false
+  webhook_url: ""            # Or set DATAGUARD_SLACK_WEBHOOK
+  channel: "#data-quality"
+  username: "DataGuard Bot"
+  icon_emoji: ":shield:"
+
+# ── Email Integration ────────────────────────────────────
+email:
+  enabled: false
+  smtp_host: ""               # Or set DATAGUARD_SMTP_HOST
+  smtp_port: 587
+  use_tls: true
+  username: ""                # Or set DATAGUARD_SMTP_USER
+  password: ""                # Or set DATAGUARD_SMTP_PASS
+  from_addr: "dataguard@example.com"
+  to_addrs: []                # Or set DATAGUARD_ALERT_EMAILS (comma-sep)
+
+# ── Console (always logs to stdout) ──────────────────────
+console:
+  enabled: true
+
+# ── Alert Triggers ───────────────────────────────────────
+alert_on:
+  critical_score: true        # Alert when overall score < critical threshold
+  any_failures: false         # Alert on any check failure
+  drift_events: true          # Alert on drift detection events
+  daily_summary: true         # Send daily summary even without failures

@@ -1,0 +1,52 @@
+# DataGuard — Default Quality Thresholds
+# Thresholds define pass/fail boundaries for each quality dimension
+
+completeness:
+  max_null_rate:
+    customer_email: 0.15
+    unit_price: 0.10
+    shipping_city: 0.08
+    customer_age: 0.05
+    payment_method: 0.05
+    _default: 0.10  # fallback for unlisted columns
+
+  min_completeness_score: 0.85  # overall weighted completeness must be >= this
+
+uniqueness:
+  max_duplicate_rate: 0.03      # max % of duplicate rows allowed
+  min_uniqueness_score: 0.95
+
+validity:
+  email_validity_rate: 0.90     # min % of emails that must be valid
+  future_date_rate: 0.02        # max % of future dates allowed
+  range_checks:
+    quantity:
+      min: 1
+      max: 10
+    unit_price:
+      min: 0
+      max: 500000
+    customer_age:
+      min: 0
+      max: 120
+  min_validity_score: 0.85
+
+consistency:
+  referential_integrity_rate: 0.98  # min % of valid customer_id references
+  min_consistency_score: 0.90
+
+timeliness:
+  max_data_freshness_hours: 48      # data should be no older than 48 hours
+  min_timeliness_score: 0.90
+
+scoring:
+  dimension_weights:
+    completeness: 0.25
+    uniqueness: 0.20
+    validity: 0.25
+    consistency: 0.15
+    timeliness: 0.15
+  severity:
+    critical: 0.50   # score < 0.50
+    warning: 0.75    # score < 0.75
+    pass: 1.0        # score >= 0.75

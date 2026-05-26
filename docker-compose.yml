@@ -1,0 +1,79 @@
+# ──────────────────────────────────────────────────────────
+# DataGuard — Docker Compose
+#
+# Start the full pipeline + dashboard:
+#   docker compose up
+#
+# Start only the pipeline (no dashboard):
+#   docker compose run pipeline
+#
+# Set alerting via environment file:
+#   docker compose --env-file .env up
+# ──────────────────────────────────────────────────────────
+
+version: "3.9"
+
+services:
+  # ── Data Pipeline ──────────────────────────────────────
+  pipeline:
+    build: .
+    image: dataguard:latest
+    container_name: dataguard-pipeline
+    volumes:
+      - ./data:/app/data
+      - ./reports:/app/reports
+      - ./config:/app/config
+    environment:
+      - DATAGUARD_SLACK_WEBHOOK=${DATAGUARD_SLACK_WEBHOOK:-}
+      - DATAGUARD_SMTP_HOST=${DATAGUARD_SMTP_HOST:-}
+      - DATAGUARD_SMTP_PORT=${DATAGUARD_SMTP_PORT:-587}
+      - DATAGUARD_SMTP_USER=${DATAGUARD_SMTP_USER:-}
+      - DATAGUARD_SMTP_PASS=${DATAGUARD_SMTP_PASS:-}
+      - DATAGUARD_ALERT_EMAILS=${DATAGUARD_ALERT_EMAILS:-}
+      - DATAGUARD_RUN_MODE=${DATAGUARD_RUN_MODE:-pipeline}
+    command: >
+      bash -c "
+        python src/data_generator.py 2>/dev/null || echo 'Data exists';
+        python src/validators.py;
+        python src/detectors.py;
+        echo 'Pipeline complete';
+      "
+
+  # ── Streamlit Dashboard ────────────────────────────────
+  dashboard:
+    build: .
+    image: dataguard:latest
+    container_name: dataguard-dashboard
+    ports:
+      - "8501:8501"
+    volumes:
+      - ./data:/app/data
+      - ./reports:/app/reports
+      - ./config:/app/config
+    environment:
+      - DATAGUARD_RUN_MODE=dashboard
+    command: streamlit run dashboard.py --server.port=8501 --server.address=0.0.0.0
+    depends_on:
+      - pipeline
+
+  # ── Scheduled Runner (runs pipeline on a cron schedule) ──
+  scheduler:
+    build: .
+    image: dataguard:latest
+    container_name: dataguard-scheduler
+    volumes:
+      - ./data:/app/data
+      - ./reports:/app/reports
+      - ./config:/app/config
+    environment:
+      - DATAGUARD_SLACK_WEBHOOK=${DATAGUARD_SLACK_WEBHOOK:-}
+      - DATAGUARD_SMTP_HOST=${DATAGUARD_SMTP_HOST:-}
+      - DATAGUARD_SMTP_PORT=${DATAGUARD_SMTP_PORT:-587}
+      - DATAGUARD_SMTP_USER=${DATAGUARD_SMTP_USER:-}
+      - DATAGUARD_SMTP_PASS=${DATAGUARD_SMTP_PASS:-}
+      - DATAGUARD_ALERT_EMAILS=${DATAGUARD_ALERT_EMAILS:-}
+      - DATAGUARD_RUN_MODE=scheduled
+      - SCHEDULE_INTERVAL=${SCHEDULE_INTERVAL:-3600}
+    command: python run_pipeline.py --schedule --interval ${SCHEDULE_INTERVAL:-3600}
+    depends_on:
+      - pipeline
