@@ -13,9 +13,7 @@ QualityReport system from validators.py.
 
 import os
 import sys
-from datetime import datetime
-from typing import Optional, List, Dict, Tuple
-from collections import defaultdict
+from typing import Optional, List
 
 import numpy as np
 import pandas as pd
@@ -519,27 +517,27 @@ def run_anomaly_pipeline(data_path: str = None, daily_dir: str = None):
     print("=" * 60)
 
     # Load data
-    print(f"\n[1/4] Loading data...")
+    print("\n[1/4] Loading data...")
     df = pd.read_csv(data_path)
     print(f"       > {len(df):,} rows, {len(df.columns)} columns")
 
     # Run pipeline
-    print(f"\n[2/4] Running anomaly detection...")
+    print("\n[2/4] Running anomaly detection...")
     pipeline = AnomalyPipeline()
     dataset_name = os.path.splitext(os.path.basename(data_path))[0]
     report = pipeline.run_all(df, dataset_name, daily_dir)
 
     # Output
-    print(f"\n[3/4] Results:")
+    print("\n[3/4] Results:")
     print(report.summary_table())
 
     # Save report
-    print(f"\n[4/4] Saving report...")
+    print("\n[4/4] Saving report...")
     report_dir = os.path.join(base_dir, config.REPORT_DIR)
     paths = save_report(report, report_dir)
 
     # Print top anomalies
-    print(f"\n  Top Anomalies (Isolation Forest):")
+    print("\n  Top Anomalies (Isolation Forest):")
     for check in report.checks:
         if check.get("check") == "isolation_forest":
             anomalies = check.get("details", {}).get("top_anomalies", [])

@@ -4,9 +4,12 @@ DataGuard — Utility functions for logging, scoring, and reporting.
 
 import json
 import os
-import csv
+import sys
 from datetime import datetime
-from typing import Dict, List, Optional, Any
+from typing import Dict, List, Optional
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from config import DEFAULT_THRESHOLDS
 
 
 class QualityReport:
@@ -158,5 +161,4 @@ def load_thresholds(path: str) -> dict:
         print(f"  Warning: Could not load thresholds from {path}: {e}")
 
     # Return built-in defaults from config
-    from config import DEFAULT_THRESHOLDS
     return DEFAULT_THRESHOLDS

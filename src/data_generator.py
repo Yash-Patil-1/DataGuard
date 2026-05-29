@@ -19,7 +19,6 @@ Quality issues injected (rates escalate over 30 days):
 
 import os
 import sys
-import csv
 import random
 import json
 from datetime import datetime, timedelta
@@ -263,7 +262,6 @@ def generate_dataset():
 
     all_daily_issues = []
     ground_truth_dfs = []
-    dirty_order_ids_seen = set()
 
     for day in range(config.NUM_DAYS):
         # Clean orders for this day
@@ -318,7 +316,7 @@ def generate_dataset():
     # Count by type
     from collections import Counter
     issue_types = Counter(i["type"] for i in all_daily_issues)
-    print(f"\n  Issues by type:")
+    print("\n  Issues by type:")
     for itype, count in sorted(issue_types.items()):
         print(f"    - {itype:30s} {count:>6,}")
 

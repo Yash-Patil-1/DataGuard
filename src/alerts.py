@@ -399,7 +399,6 @@ def evaluate_and_alert(report_json: dict, alert_config: dict) -> List[Dict[str, 
     overall = report_json.get("overall_score", 1.0)
     severity = report_json.get("scoring", {}).get("severity", {})
     critical_threshold = severity.get("critical", 0.50) if severity else 0.50
-    warning_threshold = severity.get("warning", 0.75) if severity else 0.75
 
     checks = report_json.get("checks", [])
     failed_checks = [c for c in checks if not c.get("passed", True)]

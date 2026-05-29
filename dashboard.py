@@ -21,8 +21,8 @@ from plotly.subplots import make_subplots
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "src"))
 
 # Import project modules
-from data_catalog import generate_catalog
-from history import load_history, get_score_summary
+from src.data_catalog import generate_catalog
+from src.history import load_history, get_score_summary
 
 # ── Page Config ──────────────────────────────────────────
 st.set_page_config(

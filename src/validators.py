@@ -14,14 +14,14 @@ import os
 import sys
 import re
 from datetime import datetime, timedelta
-from typing import Optional, List, Dict, Any
+from typing import Optional, List
 
 import yaml
 import numpy as np
 import pandas as pd
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from utils import check_result, QualityReport
+from utils import check_result, QualityReport, save_report
 import config
 
 
@@ -618,38 +618,38 @@ class QualityPipeline:
         report = QualityReport(dataset_name, self.thresholds)
 
         # 1. Completeness
-        print(f"  > Running completeness checks...")
+        print("  > Running completeness checks...")
         completeness = CompletenessChecker(self.thresholds, dataset_name)
         for r in completeness.run(df):
             report.add_check(r)
 
         # 2. Uniqueness
-        print(f"  > Running uniqueness checks...")
+        print("  > Running uniqueness checks...")
         uniqueness = UniquenessChecker(self.thresholds)
         for r in uniqueness.run(df):
             report.add_check(r)
 
         # 3. Validity
-        print(f"  > Running validity checks...")
+        print("  > Running validity checks...")
         validity = ValidityChecker(self.thresholds)
         for r in validity.run(df):
             report.add_check(r)
 
         # 4. Consistency
-        print(f"  > Running consistency checks...")
+        print("  > Running consistency checks...")
         consistency = ConsistencyChecker(self.thresholds, self.customers_df)
         for r in consistency.run(df):
             report.add_check(r)
 
         # 5. Timeliness
-        print(f"  > Running timeliness checks...")
+        print("  > Running timeliness checks...")
         timeliness = TimelinessChecker(self.thresholds)
         for r in timeliness.run(df):
             report.add_check(r)
 
         # 6. Accuracy (if ground truth provided)
         if ground_truth is not None:
-            print(f"  > Running accuracy checks (comparing vs ground truth)...")
+            print("  > Running accuracy checks (comparing vs ground truth)...")
             accuracy = AccuracyChecker(self.thresholds)
             for r in accuracy.run(df, ground_truth):
                 report.add_check(r)
@@ -681,7 +681,7 @@ def run_pipeline(data_path: str = None, customers_path: str = None,
     print("=" * 60)
 
     # Load thresholds
-    print(f"\n[1/4] Loading thresholds...")
+    print("\n[1/4] Loading thresholds...")
     if os.path.exists(thresholds_path):
         with open(thresholds_path, "r") as f:
             thresholds = yaml.safe_load(f)
@@ -691,7 +691,7 @@ def run_pipeline(data_path: str = None, customers_path: str = None,
         thresholds = config.DEFAULT_THRESHOLDS
 
     # Load data
-    print(f"\n[2/4] Loading data...")
+    print("\n[2/4] Loading data...")
     df = pd.read_csv(data_path)
     print(f"       > {len(df):,} rows, {len(df.columns)} columns")
 
@@ -706,18 +706,17 @@ def run_pipeline(data_path: str = None, customers_path: str = None,
         print(f"       > Ground truth: {len(ground_truth):,} rows")
 
     # Run pipeline
-    print(f"\n[3/4] Running quality checks...")
+    print("\n[3/4] Running quality checks...")
     pipeline = QualityPipeline(thresholds, customers_df)
     dataset_name = os.path.splitext(os.path.basename(data_path))[0]
     report = pipeline.run_all(df, dataset_name, ground_truth)
 
     # Output
-    print(f"\n[4/4] Results:")
+    print("\n[4/4] Results:")
     print(report.summary_table())
 
     # Save report
     report_dir = os.path.join(base_dir, config.REPORT_DIR)
-    from utils import save_report
     paths = save_report(report, report_dir)
 
     return report, paths

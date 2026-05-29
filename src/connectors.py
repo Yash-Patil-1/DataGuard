@@ -5,20 +5,23 @@ Load data from external sources: PostgreSQL, Snowflake, SQLite, and CSV.
 All connectors follow a common interface for drop-in use with the pipeline.
 
 Usage:
-    from src.connectors import get_connector, list_sources
+    from connectors import get_connector, list_sources
 
     # Auto-detect by source name:
     conn = get_connector("postgresql://host:5432/mydb")
     df = conn.query("SELECT * FROM orders WHERE date >= '2026-01-01'")
 
     # Or use specific connector:
-    from src.connectors import PostgreSQLConnector
+    from connectors import PostgreSQLConnector
     conn = PostgreSQLConnector(host="localhost", dbname="mydb", ...)
     df = conn.read_table("orders")
 """
 
+from __future__ import annotations
+
 import os
-from typing import Optional, Dict, Any, List
+import pandas as pd
+from typing import Dict, Any, List
 from urllib.parse import urlparse
 
 
@@ -267,7 +270,7 @@ class PostgreSQLConnector(BaseConnector):
         self._connect()
         cursor = self._conn.cursor()
         cursor.execute(
-            f"""
+            """
             SELECT column_name, data_type, is_nullable, character_maximum_length
             FROM information_schema.columns
             WHERE table_schema = %s AND table_name = %s
@@ -289,7 +292,7 @@ class PostgreSQLConnector(BaseConnector):
         self._connect()
         cursor = self._conn.cursor()
         cursor.execute(
-            f"""
+            """
             SELECT table_name
             FROM information_schema.tables
             WHERE table_schema = %s AND table_type = 'BASE TABLE'
@@ -422,7 +425,7 @@ class SnowflakeConnector(BaseConnector):
         self._connect()
         cursor = self._conn.cursor()
         cursor.execute(
-            f"""
+            """
             SELECT column_name, data_type, is_nullable, character_maximum_length
             FROM information_schema.columns
             WHERE table_catalog = %s AND table_schema = %s AND table_name = %s
@@ -444,7 +447,7 @@ class SnowflakeConnector(BaseConnector):
         self._connect()
         cursor = self._conn.cursor()
         cursor.execute(
-            f"""
+            """
             SELECT table_name
             FROM information_schema.tables
             WHERE table_catalog = %s AND table_schema = %s AND table_type = 'BASE TABLE'
@@ -610,12 +613,12 @@ if __name__ == "__main__":
     print("=" * 60)
     print("  DataGuard — Connectors")
     print("=" * 60)
-    print(f"\n  Available sources:")
+    print("\n  Available sources:")
     for name, desc in list_sources().items():
         print(f"    {name:15s} — {desc}")
-    print(f"\n  Usage:")
-    print(f"    from src.connectors import get_connector, load_dataframe")
-    print(f"    df = load_dataframe('csv', 'data/orders.csv')")
-    print(f"    df = load_dataframe('postgresql://user:pass@localhost/db', 'orders')")
-    print(f"    df = load_dataframe('snowflake://user:pass@acct/DB/SCHEMA', 'TABLE')")
+    print("\n  Usage:")
+    print("    from connectors import get_connector, load_dataframe")
+    print("    df = load_dataframe('csv', 'data/orders.csv')")
+    print("    df = load_dataframe('postgresql://user:pass@localhost/db', 'orders')")
+    print("    df = load_dataframe('snowflake://user:pass@acct/DB/SCHEMA', 'TABLE')")
     print("=" * 60)

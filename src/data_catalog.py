@@ -13,7 +13,6 @@ Output is a structured dict suitable for the dashboard.
 import os
 import sys
 from datetime import datetime
-from typing import Optional, Dict, List, Any
 from collections import Counter
 
 import numpy as np
@@ -105,7 +104,6 @@ def profile_column(series: pd.Series, column_name: str) -> dict:
     if is_categorical and len(non_null) > 0:
         value_counts = non_null.value_counts()
         top_values = value_counts.head(10)
-        total_top = top_values.sum()
         profile["top_values"] = [
             {
                 "value": _convert_value(idx),
@@ -338,7 +336,7 @@ def main():
 
     if catalog.get("cross_table"):
         ct = catalog["cross_table"]
-        print(f"\n  🔄 Cross-Table Comparison")
+        print("\n  🔄 Cross-Table Comparison")
         print(f"     Shared columns: {len(ct['shared_columns'])}")
         print(f"     Row count diff: {ct['row_count_diff']:+d} ({ct['row_count_diff_pct']:+.1f}%)")
 

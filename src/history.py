@@ -6,7 +6,7 @@ dashboard can display score trends, track regressions, and alert
 on quality degradation.
 
 Usage:
-    from src.history import save_to_history, load_history
+    from history import save_to_history, load_history
 
     # After running pipeline
     save_to_history(report.to_dict())
@@ -16,10 +16,14 @@ Usage:
 """
 
 import os
+import sys
 import sqlite3
 import json
 from datetime import datetime, timedelta
 from typing import List, Dict, Optional, Any
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from utils import save_report
 
 DB_FILENAME = "quality_timeline.db"
 TABLE_NAME = "quality_snapshots"
@@ -226,8 +230,6 @@ def auto_save_report(report: dict, output_dir: str = None) -> dict:
     Returns:
         dict with paths and history status
     """
-    from src.utils import save_report
-
     result = {"history_saved": False}
 
     # Save to SQLite history

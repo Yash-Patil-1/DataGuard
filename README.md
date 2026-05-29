@@ -6,7 +6,7 @@
     <img src="https://img.shields.io/badge/license-MIT-green" alt="MIT License">
     <img src="https://img.shields.io/badge/status-production%20ready-brightgreen" alt="Production Ready">
     <img src="https://img.shields.io/badge/coverage-72%20tests-passing-brightgreen" alt="72 tests passing">
-    <img src="https://img.shields.io/github/actions/workflow/status/Yash-Patil-1/dataguard/ci.yml?branch=main&label=CI" alt="CI">
+    <img src="https://img.shields.io/github/actions/workflow/status/Yash-Patil-1/dataguard/dataguard-ci.yml?branch=main&label=CI&logo=github" alt="CI">
   </p>
 </div>
 
